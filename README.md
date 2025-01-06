@@ -11,7 +11,7 @@
 - [MentOS (Mentoring Operating System)](#mentos-mentoring-operating-system)
   - [Table of Contents](#table-of-contents)
   - [What is MentOS](#what-is-mentos)
-  - [Implemented features](#implemented-features)
+  - [Requirements](#requirements)
   - [Prerequisites](#prerequisites)
     - [Installing the prerequisites](#installing-the-prerequisites)
   - [Compiling MentOS](#compiling-mentos)
@@ -51,53 +51,33 @@ Gualandri.
 
 *[Back to the Table of Contents](#table-of-contents)*
 
-## Implemented features
+## Requirements
 
-Follows the list of implemented features:
+List of Requirements to be implemented:
 
-**Processes and Events**
- - [x] Memory protection (User vs Kernel);
- - [x] Processes;
- - [x] Scheduler (synchronous and asynchronous);
- - [x] Interrupts and Exceptions;
- - [x] Signals;
- - [x] Timers and RTC;
- - [x] Wait-queues;
- - [x] System Calls;
- - [ ] Multi-core;
+**Requirement 1**
+ - [x] Round Robin (already implemented);
+   - [ ] Configurable time quantum;
+ - [ ] Shortest Job First;
+ - [ ] Priority Scheduling;
+ - [ ] Multi-Level Feedback Queue;
  
-**Memory**
- - [x] Paging;
- - [x] Buddy System;
- - [x] Slab Allocation;
- - [x] Zone Allocator;
- - [x] Cache Allocator;
- - [x] Heap;
- - [x] Virtual Addressing;
+**Requirement 2**
+ - [ ] Hierarchical Paging;
+   - [x] 2 Level (already implemented)
+   - [ ] 3 level
+   - [ ] 4 level
+ - [ ] FIFO Page Replacement;
+ - [ ] LRU Page Replacement;
+ - [ ] Configurable Frame Size;
+ - [ ] Configurable Replacement Policy;
 
-**Filesystem**
- - [x] Virtual Filesystem (VFS);
- - [x] Initramfs;
- - [x] Second Extended File System (EXT2);
- - [x] Procfs;
+**Requirement 3**
+ - [x] Extents (already implemented);
+ - [x] Configurable Extent Size;
 
-**Input/Output**
- - [x] Programmable Interrupt Controller (PIC) drivers;
- - [x] PS/2 drivers;
- - [x] Advanced Technology Attachment (ATA) drivers;
- - [x] Real Time Clock (RTC) drivers;
- - [x] Keyboard drivers (IT/ENG layouts);
- - [x] Video drivers;
- - [ ] VGA drivers;
-
-**Inter-Process Communication (IPC)**
- - [X] Semaphore
- - [X] Message queue
- - [X] Shared memory
- - [ ] PIPE
- - [ ] Named PIPE
-
-I will try to keep it updated...
+**Requirement 4**
+ - [ ] Research Report;
 
 *[Back to the Table of Contents](#table-of-contents)*
 
@@ -468,5 +448,3 @@ Developers:
   * [rouseabout](https://github.com/rouseabout)
   * [seekbytes](https://github.com/seekbytes)
   * [fischerling](https://github.com/fischerling)
-
-*[Back to the Table of Contents](#table-of-contents)*
