@@ -19,6 +19,7 @@ option(ENABLE_CACHE_TRACE "Enables cache tracing." OFF)
 option(ENABLE_ALLOC_TRACE "Enables memory allocation tracing." OFF)
 # Enables scheduling feedback on terminal.
 option(ENABLE_SCHEDULER_FEEDBACK "Enables scheduling feedback on terminal." OFF)
+# Add configuration for user-defined extents
 
 # =============================================================================
 # SOURCES
@@ -26,93 +27,94 @@ option(ENABLE_SCHEDULER_FEEDBACK "Enables scheduling feedback on terminal." OFF)
 
 # Define the list of files.
 set(KERNEL_SOURCES
-    ${CMAKE_SOURCE_DIR}/mentos/src/kernel.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/multiboot.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/devices/pci.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/devices/fpu.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/drivers/ata.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/drivers/mem.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/drivers/rtc.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/drivers/fdc.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/drivers/mouse.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/drivers/ps2.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/drivers/keyboard/keyboard.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/drivers/keyboard/keymap.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/fs/attr.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/fs/vfs.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/fs/read_write.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/fs/open.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/fs/stat.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/fs/readdir.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/fs/procfs.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/fs/ioctl.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/fs/namei.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/fs/ext2.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/hardware/timer.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/hardware/cpuid.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/hardware/pic8259.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/io/debug.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/io/mm_io.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/io/video.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/io/stdio.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/io/proc_video.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/io/proc_running.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/io/proc_feedback.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/io/proc_system.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/io/proc_ipc.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/io/vga/vga.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/ipc/ipc.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/ipc/msg.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/ipc/sem.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/ipc/shm.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/kernel/sys.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/klib/assert.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/klib/ctype.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/klib/mutex.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/klib/string.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/klib/vsprintf.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/klib/vscanf.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/klib/time.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/klib/libgen.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/klib/strerror.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/klib/math.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/klib/fcvt.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/klib/spinlock.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/klib/stdlib.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/klib/rbtree.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/klib/ndtree.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/klib/hashmap.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/klib/list.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/mem/kheap.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/mem/paging.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/mem/slab.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/mem/vmem_map.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/mem/zone_allocator.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/elf/elf.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/crypt/sha256.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/descriptor_tables/gdt.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/descriptor_tables/gdt.S
-    ${CMAKE_SOURCE_DIR}/mentos/src/descriptor_tables/interrupt.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/descriptor_tables/exception.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/descriptor_tables/interrupt.S
-    ${CMAKE_SOURCE_DIR}/mentos/src/descriptor_tables/exception.S
-    ${CMAKE_SOURCE_DIR}/mentos/src/descriptor_tables/idt.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/descriptor_tables/idt.S
-    ${CMAKE_SOURCE_DIR}/mentos/src/descriptor_tables/tss.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/descriptor_tables/tss.S
-    ${CMAKE_SOURCE_DIR}/mentos/src/process/scheduler_algorithm.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/process/scheduler_feedback.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/process/scheduler.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/process/process.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/process/wait.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/process/user.S
-    ${CMAKE_SOURCE_DIR}/mentos/src/sys/utsname.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/sys/module.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/system/errno.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/system/panic.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/system/printk.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/system/signal.c
-    ${CMAKE_SOURCE_DIR}/mentos/src/system/syscall.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/kernel.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/multiboot.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/devices/pci.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/devices/fpu.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/drivers/ata.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/drivers/mem.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/drivers/rtc.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/drivers/fdc.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/drivers/mouse.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/drivers/ps2.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/drivers/keyboard/keyboard.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/drivers/keyboard/keymap.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/fs/attr.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/fs/vfs.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/fs/read_write.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/fs/open.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/fs/stat.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/fs/readdir.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/fs/procfs.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/fs/ioctl.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/fs/namei.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/fs/ext2.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/hardware/timer.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/hardware/cpuid.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/hardware/pic8259.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/io/debug.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/io/mm_io.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/io/video.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/io/stdio.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/io/proc_video.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/io/proc_running.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/io/proc_feedback.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/io/proc_system.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/io/proc_ipc.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/io/vga/vga.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/ipc/ipc.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/ipc/msg.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/ipc/sem.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/ipc/shm.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/kernel/sys.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/klib/assert.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/klib/ctype.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/klib/mutex.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/klib/string.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/klib/vsprintf.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/klib/vscanf.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/klib/time.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/klib/libgen.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/klib/strerror.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/klib/math.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/klib/fcvt.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/klib/spinlock.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/klib/stdlib.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/klib/rbtree.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/klib/ndtree.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/klib/hashmap.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/klib/list.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/mem/kheap.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/mem/paging.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/mem/slab.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/mem/vmem_map.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/mem/zone_allocator.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/elf/elf.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/crypt/sha256.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/descriptor_tables/gdt.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/descriptor_tables/gdt.S
+        ${CMAKE_SOURCE_DIR}/mentos/src/descriptor_tables/interrupt.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/descriptor_tables/exception.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/descriptor_tables/interrupt.S
+        ${CMAKE_SOURCE_DIR}/mentos/src/descriptor_tables/exception.S
+        ${CMAKE_SOURCE_DIR}/mentos/src/descriptor_tables/idt.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/descriptor_tables/idt.S
+        ${CMAKE_SOURCE_DIR}/mentos/src/descriptor_tables/tss.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/descriptor_tables/tss.S
+        ${CMAKE_SOURCE_DIR}/mentos/src/process/scheduler_algorithm.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/process/scheduler_feedback.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/process/scheduler.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/process/process.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/process/wait.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/process/user.S
+        ${CMAKE_SOURCE_DIR}/mentos/src/sys/utsname.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/sys/module.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/system/errno.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/system/panic.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/system/printk.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/system/signal.c
+        ${CMAKE_SOURCE_DIR}/mentos/src/system/syscall.c
+        src/mem/buddysystem.c
 )
 
 # =============================================================================
@@ -128,14 +130,14 @@ else(USE_BUDDY_SYSTEM)
 endif(USE_BUDDY_SYSTEM)
 # Add the includes.
 target_include_directories(
-    ${KERNEL_NAME} PUBLIC
-    ${CMAKE_SOURCE_DIR}/mentos/inc
-    ${CMAKE_SOURCE_DIR}/libc/inc
+        ${KERNEL_NAME} PUBLIC
+        ${CMAKE_SOURCE_DIR}/mentos/inc
+        ${CMAKE_SOURCE_DIR}/libc/inc
 )
 # Define that this code is kernel code.
 target_compile_definitions(
-    ${KERNEL_NAME} PUBLIC
-    __KERNEL__
+        ${KERNEL_NAME} PUBLIC
+        __KERNEL__
 )
 # If the emulator is set to output on a log file, tell that to the C code.
 if(${EMULATOR_OUTPUT_TYPE} STREQUAL OUTPUT_LOG)
@@ -180,6 +182,23 @@ else()
 endif()
 
 # =============================================================================
+# Set the list of valid scheduling options.
+set(REPLACEMENT_ALGOS LRU_ALGO FIFO_ALGO)
+# Add the scheduling option.
+set(REPLACEMENT_ALGO "LRU_ALGO" CACHE STRING "Chose the replacement algorithm: ${REPLACEMENT_ALGOS}")
+# List of schedulers.
+set_property(CACHE REPLACEMENT_ALGO PROPERTY STRINGS ${REPLACEMENT_ALGOS})
+# Check which scheduler is currently active and export the related macro.
+list(FIND REPLACEMENT_ALGOS ${REPLACEMENT_ALGO} INDEX)
+if(index EQUAL -1)
+    message(FATAL_ERROR "Replacement Algorithm ${REPLACEMENT_ALGO} is not valid.")
+else()
+    # Add the define stating which scheduler is currently active.
+    target_compile_definitions(${KERNEL_NAME} PUBLIC ${REPLACEMENT_ALGO})
+    # Notify the type of scheduler.
+    message(STATUS "Setting replacement algorithm to ${REPLACEMENT_ALGO}.")
+endif()
+# =============================================================================
 # Set the list of valid video driver options.
 set(VIDEO_TYPES VGA_TEXT_MODE VGA_MODE_320_200_256 VGA_MODE_640_480_16 VGA_MODE_720_480_16)
 # Add the video driver option.
@@ -216,31 +235,71 @@ else()
 endif()
 
 # =============================================================================
+set(EXTENT_SIZE "30000" CACHE STRING "User-defined extent size for memory allocation.")
+message(STATUS "Extent size set to ${EXTENT_SIZE}.")
+
+string(REGEX MATCH "^[0-9]+$" IS_NUMERIC "${EXTENT_SIZE}")
+
+if(NOT IS_NUMERIC)
+    message(FATAL_ERROR "EXTENT_SIZE must be a numeric value. Provided value: ${EXTENT_SIZE}")
+endif()
+
+target_compile_definitions(${KERNEL_NAME} PUBLIC EXTENT_SIZE=${EXTENT_SIZE})
+# =============================================================================
+set(FRAME_SIZE "4" CACHE STRING "Size of Page Frames.")
+message(STATUS "Frame size set to ${FRAME_SIZE}.")
+
+string(REGEX MATCH "^[0-9]+$" IS_NUMERIC "${FRAME_SIZE}")
+
+if(NOT IS_NUMERIC)
+    message(FATAL_ERROR "FRAME_SIZE must be a numeric value. Provided value: ${FRAME_SIZE}")
+endif()
+
+target_compile_definitions(${KERNEL_NAME} PUBLIC FRAME_SIZE=${FRAME_SIZE})
+# =============================================================================
+set(PAGING_LEVELS_WORDS two three four)
+# Add the paging levels option.
+set(NUMBER_OF_PAGING_LEVELS "two" CACHE STRING "Choose the number of paging levels: ${PAGING_LEVELS_WORDS}")
+# List of valid paging levels in words.
+set_property(CACHE NUMBER_OF_PAGING_LEVELS PROPERTY STRINGS ${PAGING_LEVELS_WORDS})
+# Check which paging level is currently active and export the related macro.
+list(FIND PAGING_LEVELS_WORDS ${NUMBER_OF_PAGING_LEVELS} INDEX)
+if(INDEX EQUAL -1)
+    message(FATAL_ERROR "Paging level ${NUMBER_OF_PAGING_LEVELS} is not valid. Choose between two, three, or four.")
+else()
+    # Convert the word to uppercase for the macro definition.
+    string(TOUPPER ${NUMBER_OF_PAGING_LEVELS} NUMBER_OF_PAGING_LEVELS_UPPER)
+    target_compile_definitions(${KERNEL_NAME} PUBLIC ${NUMBER_OF_PAGING_LEVELS_UPPER}_LEVELS)
+    # Notify the selected number of paging levels.
+    message(STATUS "Setting number of paging levels to ${NUMBER_OF_PAGING_LEVELS}.")
+endif()
+# =============================================================================
+
 # Add bootloader library.
 add_library(
-    ${BOOTLOADER_NAME}
-    src/boot.c
-    src/boot.S
+        ${BOOTLOADER_NAME}
+        src/boot.c
+        src/boot.S
 )
 # Add the includes.
 target_include_directories(
-    ${BOOTLOADER_NAME} PUBLIC
-    ${CMAKE_SOURCE_DIR}/mentos/inc
-    ${CMAKE_SOURCE_DIR}/libc/inc
+        ${BOOTLOADER_NAME} PUBLIC
+        ${CMAKE_SOURCE_DIR}/mentos/inc
+        ${CMAKE_SOURCE_DIR}/libc/inc
 )
 # Define that this code is kernel code.
 target_compile_definitions(
-    ${BOOTLOADER_NAME} PUBLIC
-    __KERNEL__
+        ${BOOTLOADER_NAME} PUBLIC
+        __KERNEL__
 )
 
 # =============================================================================
 # Build the kernel.
 add_custom_target(
-    ${BOOTLOADER_NAME}.bin ALL
-    COMMAND ${CMAKE_LINKER} -melf_i386 -static --oformat elf32-i386 --output kernel.bin --script ${CMAKE_CURRENT_SOURCE_DIR}/kernel.lds -Map kernel.map -u kmain $<TARGET_FILE_NAME:${KERNEL_NAME}> ${BUDDY_SYSTEM_FILE}
-    COMMAND objcopy -I binary -O elf32-i386 -B i386 kernel.bin kernel.bin.o
-    COMMAND ${CMAKE_LINKER} -melf_i386 -static --oformat elf32-i386 --output ${BOOTLOADER_NAME}.bin --script ${CMAKE_CURRENT_SOURCE_DIR}/boot.lds -Map bootloader.map kernel.bin.o $<TARGET_FILE_NAME:${BOOTLOADER_NAME}>
-    DEPENDS ${KERNEL_NAME}
-    DEPENDS ${BOOTLOADER_NAME}
+        ${BOOTLOADER_NAME}.bin ALL
+        COMMAND ${CMAKE_LINKER} -melf_i386 -static --oformat elf32-i386 --output kernel.bin --script ${CMAKE_CURRENT_SOURCE_DIR}/kernel.lds -Map kernel.map -u kmain $<TARGET_FILE_NAME:${KERNEL_NAME}> ${BUDDY_SYSTEM_FILE}
+        COMMAND objcopy -I binary -O elf32-i386 -B i386 kernel.bin kernel.bin.o
+        COMMAND ${CMAKE_LINKER} -melf_i386 -static --oformat elf32-i386 --output ${BOOTLOADER_NAME}.bin --script ${CMAKE_CURRENT_SOURCE_DIR}/boot.lds -Map bootloader.map kernel.bin.o $<TARGET_FILE_NAME:${BOOTLOADER_NAME}>
+        DEPENDS ${KERNEL_NAME}
+        DEPENDS ${BOOTLOADER_NAME}
 )

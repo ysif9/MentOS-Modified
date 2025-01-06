@@ -6,10 +6,10 @@
 // Setup the logging for this file (do this before any other include).
 #include "sys/kernel_levels.h"           // Include kernel log levels.
 #define __DEBUG_HEADER__ "[EXT2  ]"      ///< Change header.
-#define __DEBUG_LEVEL__  LOGLEVEL_NOTICE ///< Set log level.
+#define __DEBUG_LEVEL__  LOGLEVEL_DEBUG ///< Set log level.
 #include "io/debug.h"                    // Include debugging functions.
 // If defined, ETX2 will debug everything.
-// #define EXT2_FULL_DEBUG
+#define EXT2_FULL_DEBUG
 
 #include "assert.h"
 #include "fcntl.h"
@@ -3535,6 +3535,9 @@ static vfs_file_t *ext2_mount(vfs_file_t *block_device, const char *path)
     pr_debug("ext2_mount(device: %s, path: %s)\n", block_device->name, path);
     // Create the ext2 filesystem.
     ext2_filesystem_t *fs = kmalloc(sizeof(ext2_filesystem_t));
+    uint32_t extent_size = (uint32_t)EXTENT_SIZE;
+    pr_info("Extent size as uint32_t: %u\n", extent_size);
+
     // Clean the memory.
     memset(fs, 0, sizeof(ext2_filesystem_t));
     // Initialize the filesystem spinlock.
@@ -3542,13 +3545,19 @@ static vfs_file_t *ext2_mount(vfs_file_t *block_device, const char *path)
     // Initialize the list of opened files.
     list_head_init(&fs->opened_files);
     // Set the pointer to the block device.
+
     fs->block_device = block_device;
+
     // Read the superblock.
     if (ext2_read_superblock(fs) == -1) {
         pr_err("Failed to read the superblock table at 1024.\n");
         // Free just the filesystem.
         goto free_filesystem;
     }
+
+    fs->superblock.blocks_per_group = extent_size;
+    pr_info("blocks per group after: %u\n", fs->superblock.blocks_per_group);
+
     // Check the superblock magic number.
     if (fs->superblock.magic != EXT2_SUPERBLOCK_MAGIC) {
         pr_err("Wrong magic number, it is not an EXT2 filesystem.\n");
@@ -3556,6 +3565,7 @@ static vfs_file_t *ext2_mount(vfs_file_t *block_device, const char *path)
         // Free just the filesystem.
         goto free_filesystem;
     }
+
     // Compute the volume size.
     fs->block_size = 1024U << fs->superblock.log_block_size;
     // Initialize the buffer cache.
